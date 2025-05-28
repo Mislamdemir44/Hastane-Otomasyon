@@ -1,0 +1,119 @@
+@model HospitalManagement.Web.ViewModels.MedicalRecordViewModel
+
+@{
+    ViewData["Title"] = "Tıbbi Kayıt Oluştur";
+}
+
+<div class="container">
+    <div class="card">
+        <div class="card-header bg-primary text-white">
+            <h4 class="mb-0">Yeni Tıbbi Kayıt Oluştur</h4>
+        </div>
+        <div class="card-body">
+            <div class="row mb-4">
+                <div class="col-md-6">
+                    <div class="card">
+                        <div class="card-header bg-info text-white">
+                            <h5 class="mb-0">Hasta Bilgileri</h5>
+                        </div>
+                        <div class="card-body">
+                            <dl class="row">
+                                <dt class="col-sm-4">Hasta Adı:</dt>
+                                <dd class="col-sm-8">@ViewBag.Patient.FirstName @ViewBag.Patient.LastName</dd>
+                                
+                                <dt class="col-sm-4">TC Kimlik No:</dt>
+                                <dd class="col-sm-8">@ViewBag.Patient.IdentityNumber</dd>
+                                
+                                <dt class="col-sm-4">Doğum Tarihi:</dt>
+                                <dd class="col-sm-8">@ViewBag.Patient.DateOfBirth.ToString("dd.MM.yyyy")</dd>
+                                
+                                <dt class="col-sm-4">Kan Grubu:</dt>
+                                <dd class="col-sm-8">@ViewBag.Patient.BloodType</dd>
+                            </dl>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="card">
+                        <div class="card-header bg-success text-white">
+                            <h5 class="mb-0">Randevu Bilgileri</h5>
+                        </div>
+                        <div class="card-body">
+                            <dl class="row">
+                                <dt class="col-sm-4">Doktor:</dt>
+                                <dd class="col-sm-8">Dr. @ViewBag.Doctor.User.FirstName @ViewBag.Doctor.User.LastName</dd>
+                                
+                                <dt class="col-sm-4">Tarih:</dt>
+                                <dd class="col-sm-8">@ViewBag.Appointment.AppointmentDate.ToString("dd.MM.yyyy")</dd>
+                                
+                                <dt class="col-sm-4">Saat:</dt>
+                                <dd class="col-sm-8">@ViewBag.Appointment.StartTime.ToString(@"hh\:mm") - @ViewBag.Appointment.EndTime.ToString(@"hh\:mm")</dd>
+                                
+                                <dt class="col-sm-4">Randevu Tipi:</dt>
+                                <dd class="col-sm-8">@ViewBag.Appointment.Type</dd>
+                            </dl>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <form asp-action="Create" method="post">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                
+                <input type="hidden" asp-for="PatientId" value="@Model.PatientId" />
+                <input type="hidden" asp-for="DoctorId" value="@Model.DoctorId" />
+                <input type="hidden" asp-for="AppointmentId" value="@Model.AppointmentId" />
+                <input type="hidden" asp-for="VisitDate" value="@Model.VisitDate" />
+                
+                <div class="form-group">
+                    <label asp-for="ChiefComplaint" class="control-label">Şikayet</label>
+                    <textarea asp-for="ChiefComplaint" class="form-control" rows="3" required></textarea>
+                    <span asp-validation-for="ChiefComplaint" class="text-danger"></span>
+                </div>
+                
+                <div class="form-group">
+                    <label asp-for="Diagnosis" class="control-label">Teşhis</label>
+                    <textarea asp-for="Diagnosis" class="form-control" rows="3" required></textarea>
+                    <span asp-validation-for="Diagnosis" class="text-danger"></span>
+                </div>
+                
+                <div class="form-group">
+                    <label asp-for="Treatment" class="control-label">Tedavi</label>
+                    <textarea asp-for="Treatment" class="form-control" rows="3"></textarea>
+                    <span asp-validation-for="Treatment" class="text-danger"></span>
+                </div>
+                
+                <div class="form-group">
+                    <label asp-for="Prescription" class="control-label">Reçete Notları</label>
+                    <textarea asp-for="Prescription" class="form-control" rows="3"></textarea>
+                    <span asp-validation-for="Prescription" class="text-danger"></span>
+                </div>
+                
+                <div class="form-group">
+                    <label asp-for="Notes" class="control-label">Ek Notlar</label>
+                    <textarea asp-for="Notes" class="form-control" rows="3"></textarea>
+                    <span asp-validation-for="Notes" class="text-danger"></span>
+                </div>
+                
+                <div class="form-group">
+                    <label asp-for="FollowUpDate" class="control-label">Kontrol Tarihi</label>
+                    <input asp-for="FollowUpDate" class="form-control" type="date" />
+                    <span asp-validation-for="FollowUpDate" class="text-danger"></span>
+                </div>
+                
+                <div class="form-group mt-4">
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-save"></i> Kaydet
+                    </button>
+                    <a asp-controller="Appointment" asp-action="Index" class="btn btn-secondary">
+                        <i class="fas fa-arrow-left"></i> Randevulara Dön
+                    </a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

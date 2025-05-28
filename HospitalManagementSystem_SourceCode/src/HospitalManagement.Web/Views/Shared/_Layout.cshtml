@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - Hastane Otomasyon Sistemi</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" />
+</head>
+<body>
+    <header>
+        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
+            <div class="container">
+                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">
+                    <img src="~/images/logo.png" alt="Hastane Logo" height="40" />
+                    Hastane Otomasyon Sistemi
+                </a>
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
+                        aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
+                    <ul class="navbar-nav flex-grow-1">
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">
+                                <i class="fas fa-home"></i> Ana Sayfa
+                            </a>
+                        </li>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle text-dark" href="#" id="patientDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <i class="fas fa-user-injured"></i> Hastalar
+                            </a>
+                            <div class="dropdown-menu" aria-labelledby="patientDropdown">
+                                <a class="dropdown-item" asp-area="" asp-controller="Patient" asp-action="Index">Hasta Listesi</a>
+                                <a class="dropdown-item" asp-area="" asp-controller="Patient" asp-action="Create">Yeni Hasta</a>
+                                <a class="dropdown-item" asp-area="" asp-controller="Patient" asp-action="Search">Hasta Ara</a>
+                            </div>
+                        </li>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle text-dark" href="#" id="doctorDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <i class="fas fa-user-md"></i> Doktorlar
+                            </a>
+                            <div class="dropdown-menu" aria-labelledby="doctorDropdown">
+                                <a class="dropdown-item" asp-area="" asp-controller="Doctor" asp-action="Index">Doktor Listesi</a>
+                                <a class="dropdown-item" asp-area="" asp-controller="Doctor" asp-action="Create">Yeni Doktor</a>
+                            </div>
+                        </li>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle text-dark" href="#" id="appointmentDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <i class="fas fa-calendar-check"></i> Randevular
+                            </a>
+                            <div class="dropdown-menu" aria-labelledby="appointmentDropdown">
+                                <a class="dropdown-item" asp-area="" asp-controller="Appointment" asp-action="Index">Tüm Randevular</a>
+                                <a class="dropdown-item" asp-area="" asp-controller="Appointment" asp-action="Create">Yeni Randevu</a>
+                                <a class="dropdown-item" asp-area="" asp-controller="Appointment" asp-action="ByDate">Tarihe Göre Randevular</a>
+                            </div>
+                        </li>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle text-dark" href="#" id="medicalDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <i class="fas fa-notes-medical"></i> Tıbbi İşlemler
+                            </a>
+                            <div class="dropdown-menu" aria-labelledby="medicalDropdown">
+                                <a class="dropdown-item" asp-area="" asp-controller="MedicalRecord" asp-action="Index">Tıbbi Kayıtlar</a>
+                                <a class="dropdown-item" asp-area="" asp-controller="Prescription" asp-action="Index">Reçeteler</a>
+                                <a class="dropdown-item" asp-area="" asp-controller="LabTest" asp-action="Index">Laboratuvar Testleri</a>
+                                <a class="dropdown-item" asp-area="" asp-controller="LabTest" asp-action="Requests">Test İstekleri</a>
+                            </div>
+                        </li>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle text-dark" href="#" id="billingDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <i class="fas fa-file-invoice-dollar"></i> Faturalama
+                            </a>
+                            <div class="dropdown-menu" aria-labelledby="billingDropdown">
+                                <a class="dropdown-item" asp-area="" asp-controller="Billing" asp-action="Index">Tüm Faturalar</a>
+                                <a class="dropdown-item" asp-area="" asp-controller="Billing" asp-action="InvoicesByStatus" asp-route-status="Pending">Bekleyen Faturalar</a>
+                                <a class="dropdown-item" asp-area="" asp-controller="Billing" asp-action="RevenueReport">Gelir Raporu</a>
+                            </div>
+                        </li>
+                    </ul>
+                    <ul class="navbar-nav">
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" href="#">
+                                <i class="fas fa-user-circle"></i> Kullanıcı
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </header>
+    <div class="container">
+        <main role="main" class="pb-3">
+            @RenderBody()
+        </main>
+    </div>
+
+    <footer class="border-top footer text-muted">
+        <div class="container">
+            &copy; @DateTime.Now.Year - Hastane Otomasyon Sistemi - <a asp-area="" asp-controller="Home" asp-action="Privacy">Gizlilik</a>
+        </div>
+    </footer>
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

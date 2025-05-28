@@ -1,0 +1,18 @@
+- [x] Sistem gereksinimlerini analiz et
+- [x] Sistem mimarisini tasarla
+- [x] Veritabanı şemasını tasarla
+- [x] Backend geliştirme
+  - [x] Proje yapısını oluştur
+  - [x] Entity sınıflarını oluştur
+  - [x] DbContext sınıfını oluştur
+  - [x] Repository ve UnitOfWork katmanını oluştur
+  - [x] Servis katmanını oluştur
+  - [x] Controller sınıflarını oluştur
+- [x] Frontend geliştirme
+  - [x] View modellerini oluştur
+  - [x] View dosyalarını oluştur
+  - [x] CSS ve JavaScript dosyalarını oluştur
+- [x] Sistem entegrasyonu ve test
+- [x] SOLID ve MVC uyumluluğunu doğrula
+- [x] Kodları paketleme ve dokümantasyon
+- [x] Sistemi dağıt ve kaynak kodları kullanıcıya sağla

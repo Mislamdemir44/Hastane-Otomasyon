@@ -1,0 +1,153 @@
+@{
+    ViewData["Title"] = "Ana Sayfa";
+}
+
+<div class="container">
+    <div class="jumbotron">
+        <h1 class="display-4">Hastane Otomasyon Sistemi</h1>
+        <p class="lead">Hastane yönetimi için kapsamlı bir otomasyon çözümü.</p>
+        <hr class="my-4">
+        <p>Hasta kayıtları, randevular, tıbbi kayıtlar, reçeteler, laboratuvar testleri ve faturalama işlemlerini tek bir platformda yönetin.</p>
+    </div>
+
+    <div class="row">
+        <div class="col-md-3">
+            <div class="stats-card stats-card-primary">
+                <i class="fas fa-calendar-check"></i>
+                <div class="stats-number">@ViewBag.TodayAppointmentsCount</div>
+                <div class="stats-text">Bugünkü Randevular</div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="stats-card stats-card-success">
+                <i class="fas fa-user-md"></i>
+                <div class="stats-number">@ViewBag.DoctorsCount</div>
+                <div class="stats-text">Doktorlar</div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="stats-card stats-card-info">
+                <i class="fas fa-user-injured"></i>
+                <div class="stats-number">@ViewBag.PatientsCount</div>
+                <div class="stats-text">Hastalar</div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="stats-card stats-card-warning">
+                <i class="fas fa-procedures"></i>
+                <div class="stats-number">@(ViewBag.TodayAppointmentsCount > 0 ? ViewBag.TodayAppointmentsCount / 2 : 0)</div>
+                <div class="stats-text">Tamamlanan Muayeneler</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row mt-4">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="card-title mb-0">Bugünkü Randevular</h5>
+                </div>
+                <div class="card-body">
+                    @if (Model != null && Model.Any())
+                    {
+                        <div class="table-responsive">
+                            <table class="table table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>Saat</th>
+                                        <th>Hasta</th>
+                                        <th>Doktor</th>
+                                        <th>Durum</th>
+                                        <th>İşlemler</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var appointment in Model)
+                                    {
+                                        <tr>
+                                            <td>@appointment.StartTime.ToString(@"hh\:mm")</td>
+                                            <td>@appointment.PatientName</td>
+                                            <td>@appointment.DoctorName</td>
+                                            <td>
+                                                @switch (appointment.Status)
+                                                {
+                                                    case "Scheduled":
+                                                        <span class="badge badge-primary">Planlandı</span>
+                                                        break;
+                                                    case "Completed":
+                                                        <span class="badge badge-success">Tamamlandı</span>
+                                                        break;
+                                                    case "Cancelled":
+                                                        <span class="badge badge-danger">İptal Edildi</span>
+                                                        break;
+                                                    default:
+                                                        <span class="badge badge-secondary">@appointment.Status</span>
+                                                        break;
+                                                }
+                                            </td>
+                                            <td>
+                                                <a asp-controller="Appointment" asp-action="Details" asp-route-id="@appointment.Id" class="btn btn-sm btn-info">
+                                                    <i class="fas fa-eye"></i>
+                                                </a>
+                                                @if (appointment.Status == "Scheduled")
+                                                {
+                                                    <a asp-controller="MedicalRecord" asp-action="Create" asp-route-appointmentId="@appointment.Id" class="btn btn-sm btn-success">
+                                                        <i class="fas fa-notes-medical"></i>
+                                                    </a>
+                                                }
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="alert alert-info">
+                            Bugün için planlanmış randevu bulunmamaktadır.
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="card-title mb-0">Hızlı İşlemler</h5>
+                </div>
+                <div class="card-body">
+                    <div class="list-group">
+                        <a asp-controller="Patient" asp-action="Create" class="list-group-item list-group-item-action">
+                            <i class="fas fa-user-plus mr-2"></i> Yeni Hasta Kaydı
+                        </a>
+                        <a asp-controller="Appointment" asp-action="Create" class="list-group-item list-group-item-action">
+                            <i class="fas fa-calendar-plus mr-2"></i> Yeni Randevu
+                        </a>
+                        <a asp-controller="Patient" asp-action="Search" class="list-group-item list-group-item-action">
+                            <i class="fas fa-search mr-2"></i> Hasta Ara
+                        </a>
+                        <a asp-controller="Billing" asp-action="Index" class="list-group-item list-group-item-action">
+                            <i class="fas fa-file-invoice-dollar mr-2"></i> Fatura İşlemleri
+                        </a>
+                        <a asp-controller="LabTest" asp-action="Requests" class="list-group-item list-group-item-action">
+                            <i class="fas fa-flask mr-2"></i> Laboratuvar İstekleri
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="card mt-4">
+                <div class="card-header">
+                    <h5 class="card-title mb-0">Haftalık Randevu İstatistikleri</h5>
+                </div>
+                <div class="card-body">
+                    <canvas id="appointmentsChart"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+}

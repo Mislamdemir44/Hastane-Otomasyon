@@ -1,0 +1,215 @@
+html, body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    height: 100%;
+}
+
+/* Sticky footer styles */
+.footer {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    white-space: nowrap;
+    line-height: 60px;
+}
+
+/* Navbar customization */
+.navbar {
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.navbar-brand {
+    font-weight: 600;
+    color: #2c3e50 !important;
+}
+
+/* Card styles */
+.card {
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease;
+    margin-bottom: 20px;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+}
+
+.card-header {
+    background-color: #f8f9fa;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.125);
+    font-weight: 600;
+}
+
+/* Dashboard stats */
+.stats-card {
+    text-align: center;
+    padding: 20px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    color: white;
+}
+
+.stats-card-primary {
+    background: linear-gradient(135deg, #4e73df 0%, #224abe 100%);
+}
+
+.stats-card-success {
+    background: linear-gradient(135deg, #1cc88a 0%, #13855c 100%);
+}
+
+.stats-card-info {
+    background: linear-gradient(135deg, #36b9cc 0%, #258391 100%);
+}
+
+.stats-card-warning {
+    background: linear-gradient(135deg, #f6c23e 0%, #dda20a 100%);
+}
+
+.stats-card i {
+    font-size: 2rem;
+    margin-bottom: 10px;
+}
+
+.stats-card .stats-number {
+    font-size: 1.8rem;
+    font-weight: 700;
+}
+
+.stats-card .stats-text {
+    font-size: 0.9rem;
+    text-transform: uppercase;
+}
+
+/* Form styles */
+.form-control:focus {
+    border-color: #4e73df;
+    box-shadow: 0 0 0 0.2rem rgba(78, 115, 223, 0.25);
+}
+
+.btn-primary {
+    background-color: #4e73df;
+    border-color: #4e73df;
+}
+
+.btn-primary:hover {
+    background-color: #2e59d9;
+    border-color: #2653d4;
+}
+
+/* Table styles */
+.table-responsive {
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.table thead th {
+    background-color: #f8f9fa;
+    border-bottom: 2px solid #e3e6f0;
+    font-weight: 600;
+}
+
+.table-hover tbody tr:hover {
+    background-color: rgba(78, 115, 223, 0.05);
+}
+
+/* Status badges */
+.badge-scheduled {
+    background-color: #4e73df;
+}
+
+.badge-completed {
+    background-color: #1cc88a;
+}
+
+.badge-cancelled {
+    background-color: #e74a3b;
+}
+
+.badge-pending {
+    background-color: #f6c23e;
+}
+
+.badge-active {
+    background-color: #36b9cc;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .stats-card {
+        margin-bottom: 15px;
+    }
+    
+    .stats-card .stats-number {
+        font-size: 1.5rem;
+    }
+    
+    .card {
+        margin-bottom: 15px;
+    }
+}
+
+/* Print styles */
+@media print {
+    .navbar, .footer, .no-print {
+        display: none !important;
+    }
+    
+    .container {
+        width: 100%;
+        max-width: 100%;
+    }
+    
+    .card {
+        box-shadow: none;
+        border: 1px solid #ddd;
+    }
+}
+
+/* Custom animations */
+.fade-in {
+    animation: fadeIn 0.5s ease-in;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+/* Appointment calendar styles */
+.calendar-day {
+    min-height: 100px;
+    background-color: #fff;
+    border: 1px solid #e3e6f0;
+}
+
+.calendar-day:hover {
+    background-color: #f8f9fa;
+}
+
+.calendar-day.today {
+    background-color: #e8f4ff;
+}
+
+.calendar-day .appointment {
+    padding: 5px;
+    margin: 2px;
+    border-radius: 4px;
+    font-size: 0.8rem;
+    cursor: pointer;
+}
+
+.appointment-regular {
+    background-color: #4e73df;
+    color: white;
+}
+
+.appointment-followup {
+    background-color: #1cc88a;
+    color: white;
+}
+
+.appointment-emergency {
+    background-color: #e74a3b;
+    color: white;
+}

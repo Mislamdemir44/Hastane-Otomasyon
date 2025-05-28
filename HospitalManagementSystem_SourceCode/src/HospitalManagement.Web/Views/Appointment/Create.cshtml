@@ -1,0 +1,159 @@
+@model HospitalManagement.Web.ViewModels.AppointmentViewModel
+
+@{
+    ViewData["Title"] = "Randevu Oluştur";
+}
+
+<div class="container">
+    <div class="card">
+        <div class="card-header bg-primary text-white">
+            <h4 class="mb-0">Yeni Randevu Oluştur</h4>
+        </div>
+        <div class="card-body">
+            <form asp-action="Create" method="post">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label asp-for="PatientId" class="control-label">Hasta</label>
+                            <select asp-for="PatientId" class="form-control" asp-items="ViewBag.Patients" required>
+                                <option value="">-- Hasta Seçiniz --</option>
+                            </select>
+                            <span asp-validation-for="PatientId" class="text-danger"></span>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label asp-for="DepartmentId" class="control-label">Departman</label>
+                            <select asp-for="DepartmentId" class="form-control" asp-items="ViewBag.Departments" required>
+                                <option value="">-- Departman Seçiniz --</option>
+                            </select>
+                            <span asp-validation-for="DepartmentId" class="text-danger"></span>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label asp-for="DoctorId" class="control-label">Doktor</label>
+                            <select asp-for="DoctorId" class="form-control" asp-items="ViewBag.Doctors" required>
+                                <option value="">-- Doktor Seçiniz --</option>
+                            </select>
+                            <span asp-validation-for="DoctorId" class="text-danger"></span>
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label asp-for="AppointmentDate" class="control-label">Randevu Tarihi</label>
+                            <input asp-for="AppointmentDate" class="form-control" type="date" id="appointmentDate" required />
+                            <span asp-validation-for="AppointmentDate" class="text-danger"></span>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label asp-for="StartTime" class="control-label">Başlangıç Saati</label>
+                            <select asp-for="StartTime" class="form-control" id="startTime" required>
+                                <option value="">-- Önce Doktor ve Tarih Seçiniz --</option>
+                            </select>
+                            <span asp-validation-for="StartTime" class="text-danger"></span>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label asp-for="Type" class="control-label">Randevu Tipi</label>
+                            <select asp-for="Type" class="form-control" required>
+                                <option value="">-- Tip Seçiniz --</option>
+                                @foreach (var type in HospitalManagement.Web.ViewModels.AppointmentViewModel.TypeOptions)
+                                {
+                                    <option value="@type">@type</option>
+                                }
+                            </select>
+                            <span asp-validation-for="Type" class="text-danger"></span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label asp-for="Notes" class="control-label">Notlar</label>
+                    <textarea asp-for="Notes" class="form-control" rows="3"></textarea>
+                    <span asp-validation-for="Notes" class="text-danger"></span>
+                </div>
+                
+                <input type="hidden" asp-for="EndTime" id="endTime" />
+                <input type="hidden" asp-for="Status" value="Scheduled" />
+                <input type="hidden" asp-for="CreatedById" value="@ViewBag.CurrentUserId" />
+                
+                <div class="form-group mt-4">
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-save"></i> Kaydet
+                    </button>
+                    <a asp-action="Index" class="btn btn-secondary">
+                        <i class="fas fa-arrow-left"></i> Listeye Dön
+                    </a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    
+    <script>
+        $(document).ready(function() {
+            // When doctor or date changes, fetch available time slots
+            $('#DoctorId, #appointmentDate').change(function() {
+                var doctorId = $('#DoctorId').val();
+                var appointmentDate = $('#appointmentDate').val();
+                
+                if (doctorId && appointmentDate) {
+                    $.ajax({
+                        url: '/Appointment/GetAvailableTimeSlots',
+                        type: 'GET',
+                        data: { doctorId: doctorId, date: appointmentDate },
+                        success: function(timeSlots) {
+                            var options = '<option value="">-- Saat Seçiniz --</option>';
+                            $.each(timeSlots, function(i, slot) {
+                                var time = slot.split(':');
+                                var hour = time[0];
+                                var minute = time[1];
+                                options += '<option value="' + hour + ':' + minute + '">' + hour + ':' + minute + '</option>';
+                            });
+                            $('#startTime').html(options);
+                        },
+                        error: function() {
+                            alert('Zaman dilimlerini alırken bir hata oluştu.');
+                        }
+                    });
+                }
+            });
+            
+            // When start time is selected, set end time to 30 minutes later
+            $('#startTime').change(function() {
+                var startTime = $(this).val();
+                if (startTime) {
+                    var time = startTime.split(':');
+                    var hour = parseInt(time[0]);
+                    var minute = parseInt(time[1]);
+                    
+                    // Add 30 minutes
+                    minute += 30;
+                    if (minute >= 60) {
+                        hour += 1;
+                        minute -= 60;
+                    }
+                    
+                    // Format as HH:MM
+                    var endHour = hour.toString().padStart(2, '0');
+                    var endMinute = minute.toString().padStart(2, '0');
+                    var endTime = endHour + ':' + endMinute;
+                    
+                    $('#endTime').val(endTime);
+                }
+            });
+            
+            // If patient ID is in query string, select it
+            var urlParams = new URLSearchParams(window.location.search);
+            var patientId = urlParams.get('patientId');
+            if (patientId) {
+                $('#PatientId').val(patientId);
+            }
+        });
+    </script>
+}
